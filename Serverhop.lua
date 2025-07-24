@@ -26,4 +26,4 @@ local function serverHop()
 	end
 end
 
--- serverHop() -- You can bind this to a GUI button
+serverHop() 
