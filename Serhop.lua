@@ -26,7 +26,7 @@ frame.Draggable = true
 --// Rainbow Title
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, 0, 0, 40)
-title.Text = "🌈 Server Hopper 🌈"
+title.Text = " Server Hopper "
 title.Font = Enum.Font.GothamBold
 title.TextScaled = true
 title.BackgroundTransparency = 1
@@ -47,7 +47,7 @@ serverInfo.Text = string.format("Job ID:\n%s\nPlayers: %d/%d", jobId, #Players:G
 local hopBtn = Instance.new("TextButton", frame)
 hopBtn.Size = UDim2.new(0.8, 0, 0, 40)
 hopBtn.Position = UDim2.new(0.1, 0, 1, -50)
-hopBtn.Text = "🔁 Hop Server"
+hopBtn.Text = "Hop Server"
 hopBtn.Font = Enum.Font.GothamMedium
 hopBtn.TextSize = 18
 hopBtn.TextColor3 = Color3.new(1,1,1)
