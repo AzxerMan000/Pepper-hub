@@ -2,60 +2,56 @@
 local TeleportService = game:GetService("TeleportService")
 local Players = game:GetService("Players")
 local HttpService = game:GetService("HttpService")
-local TweenService = game:GetService("TweenService")
 local CoreGui = game:GetService("CoreGui")
 
---// Variables
 local player = Players.LocalPlayer
 local placeId = game.PlaceId
 local jobId = game.JobId
+
+--// GUI Setup
 local gui = Instance.new("ScreenGui", CoreGui)
 gui.Name = "ServerHopGUI"
 gui.ResetOnSpawn = false
 
---// UI Main Frame
+--// Main Frame
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 300, 0, 180)
-frame.Position = UDim2.new(0.5, -150, 0.5, -90)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.Size = UDim2.new(0, 320, 0, 200)
+frame.Position = UDim2.new(0.5, -160, 0.5, -100)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.Active = true
 frame.Draggable = true
 
+-- Rounded Corners
+local corner = Instance.new("UICorner", frame)
+corner.CornerRadius = UDim.new(0, 10)
+
+--// Close Button (X)
+local closeBtn = Instance.new("TextButton", frame)
+closeBtn.Size = UDim2.new(0, 30, 0, 30)
+closeBtn.Position = UDim2.new(1, -35, 0, 5)
+closeBtn.Text = "X"
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 18
+closeBtn.TextColor3 = Color3.new(1, 1, 1)
+closeBtn.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+Instance.new("UICorner", closeBtn).CornerRadius = UDim.new(1, 0)
+
+closeBtn.MouseButton1Click:Connect(function()
+	gui:Destroy()
+end)
+
 --// Rainbow Title
 local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 40)
-title.Text = " Server Hopper "
+title.Size = UDim2.new(1, -40, 0, 40)
+title.Position = UDim2.new(0, 10, 0, 5)
+title.Text = "Server Hopper"
 title.Font = Enum.Font.GothamBold
 title.TextScaled = true
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.new(1, 0, 0)
 
---// Server Info
-local serverInfo = Instance.new("TextLabel", frame)
-serverInfo.Size = UDim2.new(1, -20, 0, 60)
-serverInfo.Position = UDim2.new(0, 10, 0, 50)
-serverInfo.TextWrapped = true
-serverInfo.Font = Enum.Font.Code
-serverInfo.TextSize = 16
-serverInfo.BackgroundTransparency = 1
-serverInfo.TextColor3 = Color3.fromRGB(200, 200, 200)
-serverInfo.Text = string.format("Job ID:\n%s\nPlayers: %d/%d", jobId, #Players:GetPlayers(), game.Players.MaxPlayers)
-
---// Hop Button
-local hopBtn = Instance.new("TextButton", frame)
-hopBtn.Size = UDim2.new(0.8, 0, 0, 40)
-hopBtn.Position = UDim2.new(0.1, 0, 1, -50)
-hopBtn.Text = "Hop Server"
-hopBtn.Font = Enum.Font.GothamMedium
-hopBtn.TextSize = 18
-hopBtn.TextColor3 = Color3.new(1,1,1)
-hopBtn.BackgroundColor3 = Color3.fromRGB(80, 170, 255)
-hopBtn.BorderSizePixel = 0
-hopBtn.AutoButtonColor = true
-
---// Rainbow Title Tweening
+-- Rainbow Title Animation
 task.spawn(function()
 	while true do
 		for hue = 0, 1, 0.01 do
@@ -65,7 +61,33 @@ task.spawn(function()
 	end
 end)
 
---// Hop Button Logic
+--// Server Info Label
+local infoLabel = Instance.new("TextLabel", frame)
+infoLabel.Size = UDim2.new(1, -20, 0, 60)
+infoLabel.Position = UDim2.new(0, 10, 0, 50)
+infoLabel.Font = Enum.Font.Code
+infoLabel.TextSize = 16
+infoLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+infoLabel.BackgroundTransparency = 1
+infoLabel.TextWrapped = true
+infoLabel.TextXAlignment = Enum.TextXAlignment.Left
+infoLabel.TextYAlignment = Enum.TextYAlignment.Top
+infoLabel.Text = string.format("Job ID: %s\nPlayers: %d/%d", jobId, #Players:GetPlayers(), game.Players.MaxPlayers)
+
+--// Hop Button
+local hopBtn = Instance.new("TextButton", frame)
+hopBtn.Size = UDim2.new(0.8, 0, 0, 40)
+hopBtn.Position = UDim2.new(0.1, 0, 1, -50)
+hopBtn.Text = "Hop Server"
+hopBtn.Font = Enum.Font.GothamMedium
+hopBtn.TextSize = 18
+hopBtn.TextColor3 = Color3.new(1, 1, 1)
+hopBtn.BackgroundColor3 = Color3.fromRGB(80, 170, 255)
+hopBtn.BorderSizePixel = 0
+hopBtn.AutoButtonColor = true
+Instance.new("UICorner", hopBtn).CornerRadius = UDim.new(0, 8)
+
+--// Hop Server Logic
 local function hopServer()
 	local servers = {}
 	local cursor = ""
@@ -96,7 +118,7 @@ local function hopServer()
 		local randomServer = servers[math.random(1, #servers)]
 		TeleportService:TeleportToPlaceInstance(placeId, randomServer, player)
 	else
-		hopBtn.Text = "❌ No servers found!"
+		hopBtn.Text = "No servers found"
 	end
 end
 
